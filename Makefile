@@ -1,6 +1,6 @@
 NAME = ft_ping
 FLAGS = -Wall -Wextra -Werror
-SRCS = ft_ping.c utils.c
+SRCS = ft_ping.c flag.c utils.c
 
 all: $(NAME)
 

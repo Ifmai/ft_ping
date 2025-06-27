@@ -30,9 +30,12 @@
 	#include <sys/socket.h>
 	#include <netinet/ip_icmp.h>
 
+	void			flag_help();
 	long    		get_current_time();
+	void 			flag_verbose(char *domain);
 	void 			program_check(int ac, char *argv[]);
 	unsigned short  calculate_checksum(void *b, int len);
 	void 			resolve_address(const char *destination, struct sockaddr_in *dest_addr);
+
 
 #endif

@@ -50,9 +50,9 @@ static void start_ping(const char *destination, int sockfd){
 	char recv_buffer[1024];
     int seq = 0;
 
+	if(global_flag.verbose_mode)
+		flag_verbose(global_flag.destination);
 	printf("PING %s (%s): %d data bytes\n", destination, destination, PACKET_SIZE);
-
-    //long timeout_time = get_current_time() / 1000000.0;
 
 	while (TRUE){
 		seq++;
@@ -62,9 +62,6 @@ static void start_ping(const char *destination, int sockfd){
 		
 		long start_time = get_current_time();
 		socklen_t addr_len = sizeof(dest_addr);
-
-		if (global_flag.verbose_mode)
-			printf("[VERBOSE] Sending ICMP packet to %s: icmp_seq=%d, checksum=%u\n", destination, seq, packet.icmp_cksum);
 
 		if (sendto(sockfd, &packet, sizeof(packet), 0, (struct sockaddr *)&dest_addr, addr_len) == 0){
 			perror("sendto");
@@ -85,13 +82,7 @@ static void start_ping(const char *destination, int sockfd){
         }
 
         struct iphdr *ip_header = (struct iphdr *)recv_buffer;
-        struct icmp *icmp_header = (struct icmp *)(recv_buffer + sizeof(struct iphdr));
         int ttl = ip_header->ttl;
-
-        if (global_flag.verbose_mode) {
-            printf("[VERBOSE] Received ICMP packet: type=%d, code=%d, id=%d, ttl=%d\n",
-                icmp_header->icmp_type, icmp_header->icmp_code, icmp_header->icmp_id, ttl);
-        }
 
         long end_time = get_current_time();
 		printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2f ms\n",
